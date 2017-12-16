@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.estique.realmtest.MainActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,15 +33,40 @@
             android:maxLines="1"
             android:padding="5dp" />
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Save" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/btnView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="View" />
+
+        </LinearLayout>
+
+
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
 
 
     </LinearLayout>
+
+
 
 
 </android.support.constraint.ConstraintLayout>
