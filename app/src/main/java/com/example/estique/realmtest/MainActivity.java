@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,13 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button btnSave = findViewById(R.id.btnSave);
+        Button btnView = findViewById(R.id.btnView);
+        btnView.setOnClickListener(clickListener);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (!TextUtils.isEmpty(etName.getText().toString().trim()) && !TextUtils.isEmpty(etNumber.getText().toString().trim())) {
-
+                    etName.setText("");
+                    etNumber.setText("");
                     addContact(etName.getText().toString().trim(), etNumber.getText().toString().trim());
 
                 } else {
@@ -53,6 +59,51 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+    }
+
+    View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            switch (view.getId()) {
+
+                case R.id.btnView:
+
+                    getPhoneBook();
+
+                    break;
+
+
+            }
+
+        }
+    };
+
+
+    private void getPhoneBook() {
+
+        RealmResults<PhoneBook> result = realm.where(PhoneBook.class)
+                .findAllAsync();
+
+        result.load();
+
+        ArrayAdapter adapter = new ArrayAdapter<String >(this, R.layout.list_item);
+
+
+        for (PhoneBook phoneBook:result) {
+
+            adapter.add(phoneBook.getName() + " - " + phoneBook.getNumber());
+        }
+
+        ListView listView = findViewById(R.id.listview);
+
+        listView.setAdapter(adapter);
+
+
+
+
     }
 
     private void addContact(final String name, final String number) {
@@ -70,15 +121,16 @@ public class MainActivity extends AppCompatActivity {
                                       }, new Realm.Transaction.OnSuccess() {
                                           @Override
                                           public void onSuccess() {
+                                              Toast.makeText(MainActivity.this, "New Contact Added.", Toast.LENGTH_SHORT).show();
 
                                               Log.d("Realm", "onSuccess");
-
 
 
                                           }
                                       }, new Realm.Transaction.OnError() {
                                           @Override
                                           public void onError(Throwable error) {
+                                              Toast.makeText(MainActivity.this, "Failed ! ", Toast.LENGTH_SHORT).show();
 
                                               Log.d("Realm", "onError");
 
